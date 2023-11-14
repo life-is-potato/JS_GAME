@@ -1,0 +1,84 @@
+image editor goals:
+
+tools{
+	
+    pencil:
+        editable size;
+        alpha compositing;
+        able to pick between two colors;
+
+    select tool:
+        two modes:
+            rectangle select
+            lasso select
+    
+    magic wand tool:
+
+    color picker tool:
+        manual or automatic with alt key;
+    
+    paint bucket tool:
+
+    line tool
+
+    zoom tool
+
+    move tool
+}
+
+layer system{
+    
+    duplicating/copying a layer
+
+    grouping layers:
+
+    add a layer:
+
+    select a layer:
+
+    delete a layer:
+
+    edit a layer's settings:
+        editing a layer's alpha value
+        making a layer visible/invisible
+        locking a layer
+        
+}
+
+palette editor{
+    
+    palette maker
+        editting the palette
+        adding colors
+        removing colors
+        importing a palette
+    
+    color wheel
+        rgb + alpha
+}
+
+animations (maybe){
+
+}
+
+view_settings{
+    
+    tiling mode:
+        symmetry
+
+    grid display
+}
+image editing{
+    
+    copy + paste
+
+    undo, redo
+
+    flip
+
+    resize canvas
+
+    resize sprite
+
+    rotate (maybe)
+}
