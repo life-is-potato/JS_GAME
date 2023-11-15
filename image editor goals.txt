@@ -22,8 +22,6 @@ tools{
     line tool
 
     zoom tool
-
-    move tool
 }
 
 layer system{
