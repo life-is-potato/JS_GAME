@@ -1,26 +1,31 @@
 <!doctype html>
 <html lang="en-US">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet" type="text/css" href="index.css" />
-    <title>Canvas experiment</title>
-  </head>
-  <body style="background-color: #655561">
-    <!DOCTYPE html>
-      <html>
-        <body>
-          <div id="mySidenav" class="sidenav">
-            </br>
-            </br>
-            </br>
-            <img src="buttons/color_picker.png"></br>
-            <img src="buttons/eraser.png"></br>
-          </div>
-          <div class="sidenav2">
-          </div>
-          <div class="bottomnav">
-          </div>
-            <div style = "
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" type="text/css" href="index.css" />
+  <title>Canvas experiment</title>
+</head>
+
+<body style="background-color: #191716">
+  <!DOCTYPE html>
+
+  <body>
+    <div id="mySidenav" class="sidenav">
+      <img src="buttons/rectangle_select.png" class="button"></br>
+      <img src="buttons/pencil.png" class="button"></br>
+      <img src="buttons/eraser.png" class="button"></br>
+      <img src="buttons/magic_wand.png" class="button"></br>
+      <img src="buttons/color_picker.png" class="button"></br>
+      <img src="buttons/zoom.png" class="button"></br>
+      <img src="buttons/line.png" class="button"></br>
+      <img src="buttons/rectangle.png" class="button"></br>
+    </div>
+    <div class="sidenav2">
+    </div>
+    <div class="bottomnav">
+    </div>
+    <div style="
                           margin: auto;
                           width: 600px;
                           height: 600px;
@@ -28,41 +33,30 @@
                           top: -200px;
                           bottom: 0;
                           left: 0;
-                          right: 0;"
-              >
-              <canvas id="canvas" height="600" width="600" style="background-color: #F1F7ED; border-color: black; border-style:solid; border-width: 2px; ">This is my canvas</canvas>
-            </div>
-        </body>
-      </html>
-    <script type="application/javascript">
-      function draw() {
-  const canvas = document.getElementById("canvas");
-  if (canvas.getContext) {
-    const ctx = canvas.getContext("2d");
-
-    for (let i = 0; i < 4; i++) {
-      for (let j = 0; j < 3; j++) {
-        ctx.strokeStyle = "orange";
-        ctx.beginPath();
-        const x = 25 + j * 50; // x coordinate
-        const y = 25 + i * 50; // y coordinate
-        const radius = 20; // Arc radius
-        const startAngle = 0; // Starting point on circle
-        const endAngle = Math.PI + (Math.PI * j) / 2; // End point on circle
-        const counterclockwise = i % 2 !== 0; // clockwise or counterclockwise
-
-        ctx.arc(x, y, radius, startAngle, endAngle, counterclockwise);
-
-        if (i > 1) {
-          ctx.fill();
-        } else {
-          ctx.stroke();
-        }
-      }
-    }
-  }
-}
-      draw();
-    </script>
+                          right: 0;">
+      <canvas id="canvas" height="600" width="600" class="canvas"></canvas>
+    </div>
   </body>
+
+  <script type="application/javascript">
+    (function () {
+      let SSWZ = function () {
+        this.keyScrollHandler = function (e) {
+          if (e.ctrlKey) {
+            e.preventDefault();
+            return false;
+          }
+        }
+      };
+      if (window === top) {
+        let sswz = new SSWZ();
+        window.addEventListener('wheel', sswz.keyScrollHandler, { passive: false });
+      }
+    })();
+</script>
+
+
+
+</body>
+
 </html>
