@@ -2,10 +2,40 @@
 <html lang="en-US">
   <head>
     <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" href="index.css" />
     <title>Canvas experiment</title>
   </head>
   <body>
-    <canvas id="canvas" width="150" height="150"></canvas>
+    <!DOCTYPE html>
+      <html>
+        <body>
+          <div id="mySidenav" class="sidenav">
+            <a href="#">About</a></br>
+            <a href="#">Services</a></br>
+            <a href="#">Clients</a></br>
+            <a href="#">Contact</a></br>
+          </div>
+          <div class="sidenav2">
+            <a href="#">About</a></br>
+            <a href="#">Services</a></br>
+            <a href="#">Clients</a></br>
+            <a href="#">Contact</a></br>
+          </div>
+            <div style = "padding: 0;
+                          margin: auto;
+                          display: block;
+                          width: 600px;
+                          height: 600px;
+                          position: absolute;
+                          top: 0;
+                          bottom: 0;
+                          left: 0;
+                          right: 0;"
+              >
+              <canvas id="canvas" height="600" width="600" style="background-color: black;">This is my canvas</canvas>
+            </div>
+        </body>
+      </html>
     <script type="application/javascript">
       function draw() {
   const canvas = document.getElementById("canvas");
@@ -14,6 +44,7 @@
 
     for (let i = 0; i < 4; i++) {
       for (let j = 0; j < 3; j++) {
+        ctx.strokeStyle = "orange";
         ctx.beginPath();
         const x = 25 + j * 50; // x coordinate
         const y = 25 + i * 50; // y coordinate
