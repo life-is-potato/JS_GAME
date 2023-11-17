@@ -1,29 +1,52 @@
 <!doctype html>
 <html lang="en-US">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Canvas experiment</title>
-  </head>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" type="text/css" href="index.css" />
+  <title>Canvas experiment</title>
+</head>
+
+<body style="background-color: #191716">
+  <!DOCTYPE html>
+
   <body>
-    <div style="background-color: 373F51;">
-    <canvas id="canvas" width="150" height="150"></canvas>
-    <script type="application/javascript">
-      function draw() {
-        const canvas = document.getElementById("canvas");
-        if (canvas.getContext) {
-          const ctx = canvas.getContext("2d");
-          ctx.fillStyle = "rgb(200, 0, 0)";
-          ctx.beginPath();
-          //ctx.moveTo(25, 25);
-          ctx.arc(100,50,50,Math.PI,false);
-          ctx.lineTo(150,100);
-          ctx.moveTo(50,50);
-          ctx.lineTo(50,100); 
-          ctx.stroke();
-        }
-      }
-      draw();
-    </script>
+    <input type="color" id="colorpicked"></input>
+    <div id="mySidenav" class="sidenav">
+      <div id="buttons">
+        <img src="buttons/rectangle_select.png" class="button"></br>
+        <img src="buttons/pencil.png" class="button" id="pencil"></br>
+        <img src="buttons/eraser.png" class="button" id="eraser"></br>
+        <img src="buttons/magic_wand.png" class="button"></br>
+        <img src="buttons/color_picker.png" class="button"></br>
+        <img src="buttons/zoom.png" class="button"></br>
+        <img src="buttons/line.png" class="button"></br>
+        <img src="buttons/rectangle.png" class="button"></br>
+      </div>
+    </div>
+    <div class="sidenav2">
+    </div>
+    <div class="bottomnav">
+    </div>
+    <div id="canvascontainer" style="
+                          margin: auto;
+                          width: 600px;
+                          height: 600px;
+                          position: absolute;
+                          top: -200px;
+                          bottom: 0;
+                          left: 0;
+                          right: 0;">
+      <canvas id="canvas" height="600" width="600" class="canvas"></canvas>
     </div>
   </body>
+
+<script type="application/javascript" src="js/editor.js">
+    
+</script>
+
+
+
+</body>
+
 </html>
