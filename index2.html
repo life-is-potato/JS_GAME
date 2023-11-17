@@ -25,7 +25,7 @@
     </div>
     <div class="bottomnav">
     </div>
-    <div style="
+    <div id="canvascontainer" style="
                           margin: auto;
                           width: 600px;
                           height: 600px;
@@ -38,21 +38,8 @@
     </div>
   </body>
 
-  <script type="application/javascript">
-    (function () {
-      let SSWZ = function () {
-        this.keyScrollHandler = function (e) {
-          if (e.ctrlKey) {
-            e.preventDefault();
-            return false;
-          }
-        }
-      };
-      if (window === top) {
-        let sswz = new SSWZ();
-        window.addEventListener('wheel', sswz.keyScrollHandler, { passive: false });
-      }
-    })();
+<script type="application/javascript" src="js/editor.js">
+    
 </script>
 
 
