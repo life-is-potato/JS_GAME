@@ -11,15 +11,16 @@
   <!DOCTYPE html>
 
   <body>
+    <div><img src="buttons/logo.png"></img></div>
     <input type="color" id="colorpicked"></input>
     <div id="mySidenav" class="sidenav">
       <div id="buttons">
-        <img src="buttons/rectangle_select.png" class="button"></br>
+        <img src="buttons/rectangle_select.png" class="button" id="recangle_select"></br>
         <img src="buttons/pencil.png" class="button" id="pencil"></br>
         <img src="buttons/eraser.png" class="button" id="eraser"></br>
-        <img src="buttons/magic_wand.png" class="button"></br>
+        <img src="buttons/magic_wand.png" class="button" id="magic_wand"></br>
         <img src="buttons/color_picker.png" class="button"></br>
-        <img src="buttons/zoom.png" class="button"></br>
+        <img src="buttons/zoom.png" class="button" id="zoom"></br>
         <img src="buttons/line.png" class="button"></br>
         <img src="buttons/rectangle.png" class="button"></br>
       </div>
@@ -28,20 +29,12 @@
     </div>
     <div class="bottomnav">
     </div>
-    <div id="canvascontainer" style="
-                          margin: auto;
-                          width: 600px;
-                          height: 600px;
-                          position: absolute;
-                          top: -200px;
-                          bottom: 0;
-                          left: 0;
-                          right: 0;">
-      <canvas id="canvas" height="600" width="600" class="canvas"></canvas>
+    <div id="canvascontainer">
+      <canvas class="canvas" id="canvas"></canvas>
     </div>
   </body>
 
-<script type="application/javascript" src="js/editor.js">
+<script type="application/javascript" src="js/reference.js">
     
 </script>
 
