@@ -54,8 +54,11 @@
 }
 
 .canvas{
-  background-color:gray; border-color: white; border-style:solid; border-radius: 3px; border-width: 3px; 
+  background-color:lightblue; border-color: white; border-style:solid; border-radius: 3px; border-width: 3px; 
   image-rendering: pixelated;
+}
+.canvas:hover{
+  cursor:crosshair;
 }
 .button:hover{
   opacity: 0.5;

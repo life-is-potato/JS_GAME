@@ -5,14 +5,22 @@ const colorinput= document.getElementById("colorpicked");
 let pixels_width = 32;
 let pixels_height = 32;
 let pixels = new Array(pixels_width*pixels_height);
-let scale=1;
+let scale=4;
 let color="rgba(255,255,255,1)";
-let clicking=false;
+let leftClicking=false;
+let rightClicking=false;
 
 updateCanvasSize();
 
 let tool=pencil;
 prepPixels();
+
+function handleKeyboard(e){
+    switch (e.key){
+        case "b": tool=pencil;break;
+        case "e": tool=eraser;break;
+    }
+}
 
 function updateCanvasSize(){
     canvas.width=pixels_width*scale;
@@ -24,21 +32,41 @@ function updateCanvasSize(){
     canvas.style.left=`${(1920-(pixels_width*scale))/2}px`;
 }
 
-function handleClickCanvas(e){
-    clicking=true;
+function handleMouseDown(e){
+    if(e.button==0)leftClicking=true;
+    else rightClicking=true;
+    handleMouseMoveCanvas(e);
+    console.log(leftClicking,rightClicking);
+}
+
+function handleMouseUp(e){
+    if(e.button==0)leftClicking=false;
+    else rightClicking=false;
+    console.log(leftClicking,rightClicking);
+}
+
+function handleMouseMoveCanvas(e){
+    if(!leftClicking && !rightClicking)return;
     const canvasBoundingRect = canvas.getBoundingClientRect();
-    const x = e.clientX - canvasBoundingRect.left;
-    const y = e.clientY - canvasBoundingRect.top;
+    const x = e.clientX - canvasBoundingRect.left - 3;
+    const y = e.clientY - canvasBoundingRect.top - 3;
     const realX=Math.floor(x/scale);
     const realY=Math.floor(y/scale);
     if (tool==zoom){
-        if(e.button==0)tool(1);
+        if(leftClicking)tool(1);
         else tool(-1);
     }
-    else if (e.button!=0){
+    else if (rightClicking!=0){
         eraser(realX,realY);
     }
+    else if (e.ctrlKey){
+        pickColor(realX,realY);
+    }
     else tool(realX,realY);
+}
+
+function pickColor(x,y){
+    colorinput.value=pixels[x+y*pixels_width];
 }
 
 function eraser(x,y){
@@ -88,9 +116,18 @@ function pick(e){
     }
 }
 
+function handleScrollwheel(e){
+    e.preventDefault();
+    console.log("a");
+    zoom(Math.sign(e.wheelDelta));
+}
+
 buttons.addEventListener("click",pick);
 
-canvas.addEventListener("click",handleClickCanvas);
-canvas.addEventListener("contextmenu",handleClickCanvas);
+canvas.addEventListener("mousemove",handleMouseMoveCanvas);
+canvas.addEventListener("mousedown",handleMouseDown);
+addEventListener("mouseup",handleMouseUp);
+addEventListener("keypress",handleKeyboard);
 
 document.addEventListener('contextmenu', event => event.preventDefault());
+addEventListener("wheel",handleScrollwheel,{ passive: false });
