@@ -6,7 +6,6 @@ let pixels_width = 32;
 let pixels_height = 32;
 let pixels = new Array(pixels_width*pixels_height);
 let scale=4;
-let color="rgba(255,255,255,1)";
 let leftClicking=false;
 let rightClicking=false;
 
@@ -19,6 +18,9 @@ function handleKeyboard(e){
     switch (e.key){
         case "b": tool=pencil;break;
         case "e": tool=eraser;break;
+        case "p": tool=pickColor;break;
+        case "g": tool=fill;break;
+        case "k": console.log(pixels);
     }
 }
 
@@ -36,13 +38,25 @@ function handleMouseDown(e){
     if(e.button==0)leftClicking=true;
     else rightClicking=true;
     handleMouseMoveCanvas(e);
-    console.log(leftClicking,rightClicking);
 }
 
 function handleMouseUp(e){
     if(e.button==0)leftClicking=false;
     else rightClicking=false;
-    console.log(leftClicking,rightClicking);
+    if (tool==fill){
+        const canvasBoundingRect = canvas.getBoundingClientRect();
+        const x = e.clientX - canvasBoundingRect.left - 3;
+        const y = e.clientY - canvasBoundingRect.top - 3;
+        var realX=Math.floor(x/scale);
+        var realY=Math.floor(y/scale);
+        if(realX>=0 && realX<=pixels_width && realY>=0 && realY<=pixels_height){
+            visited=new Array(pixels_width*pixels_height);
+            for(var i=0;i<pixels_width*pixels_height;i++)
+                visited[i]=false;
+            tool(realX,realY,pixels[realX+realY*pixels_width],visited);
+            drawPixels();
+        }
+    }
 }
 
 function handleMouseMoveCanvas(e){
@@ -69,15 +83,31 @@ function pickColor(x,y){
     colorinput.value=pixels[x+y*pixels_width];
 }
 
+function fill(x,y,initialcolor,visited){
+    var current=x+y*pixels_width;
+    if(pixels[current]!=colorinput.value){
+        if(pixels[current]==initialcolor && !visited[current]){
+            visited[current]=true; 
+            pixels[current]=colorinput.value;
+            if(x+1<pixels_width)fill(x+1,y,initialcolor,visited);
+            if(x-1>=0)fill(x-1,y,initialcolor,visited);
+            if(y+1<pixels_height)fill(x,y+1,initialcolor,visited);
+            if(y-1>=0)fill(x,y-1,initialcolor,visited);
+        }
+    }
+}
+
 function eraser(x,y){
     ctx.globalCompositeOperation="destination-out";
-    putPixel(x,y,"rgba(255,255,255,255)");
+    putPixel(x,y,colorinput.value);
     pixels[x + y*pixels_width]="rgba(0,0,0,0)";
+    ctx.globalCompositeOperation="source-over";
 }
 
 function pencil(x,y){
     ctx.globalCompositeOperation="source-over";
     putPixel(x,y,colorinput.value);
+    pixels[x + y*pixels_width]=colorinput.value;
 }
 
 function zoom(val){
@@ -88,7 +118,6 @@ function zoom(val){
 
 function putPixel(x,y,c){
     ctx.fillStyle = c;
-    pixels[x + y*pixels_width]=c;
     ctx.fillRect(x*scale,y*scale,scale,scale);
 }
 
@@ -105,7 +134,6 @@ function drawPixels(){
 }
 
 function pick(e){
-    console.log(e.target.id);
     switch(e.target.id){
         case "eraser":
             tool=eraser;break;
@@ -113,12 +141,13 @@ function pick(e){
             tool=pencil;break;
         case "zoom":
             tool=zoom;break;
+        case "color_picker":
+            tool=pickColor;break;
     }
 }
 
 function handleScrollwheel(e){
     e.preventDefault();
-    console.log("a");
     zoom(Math.sign(e.wheelDelta));
 }
 

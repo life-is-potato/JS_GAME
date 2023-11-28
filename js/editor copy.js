@@ -68,4 +68,3 @@ app = new PixelCanvas(32,32);
 app.empty("#ffffff");
 drawCanvas(app.dom,app);
 document.getElementById("canvascontainer").appendChild(app.dom);
-addEventListener("wheel", zoom, { passive: false });
