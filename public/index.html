@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="stylesheet" type="text/css" href="index.css" />
+  <link rel="script" type="js" href="../src/controller/reference.js"/>
   <title>Canvas experiment</title>
 </head>
 
@@ -15,7 +16,7 @@
     <input type="color" id="colorpicked"></input>
     <div id="mySidenav" class="sidenav">
       <div id="buttons">
-        <img src="buttons/rectangle_select.png" class="button" id="recangle_select"></br>
+        <img src="buttons/rectangle_select.png" class="button" id="rectangle_select"></br>
         <img src="buttons/pencil.png" class="button" id="pencil"></br>
         <img src="buttons/eraser.png" class="button" id="eraser"></br>
         <img src="buttons/magic_wand.png" class="button" id="magic_wand"></br>
@@ -31,14 +32,13 @@
     </div>
     <div id="canvascontainer">
       <canvas class="canvas" id="canvas"></canvas>
+      <canvas id="effect_canvas" style="image-rendering: pixelated;"></canvas>
+      
+      <button onclick="saveAsPNG()">Save as Png</button>
     </div>
   </body>
-
-<script type="application/javascript" src="js/reference.js">
-    
-</script>
-
-
+  <script type="application/javascript" src="../src/controller/reference.js">
+  </script>
 
 </body>
 
