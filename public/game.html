@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en-US">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Game</title>
+  <style>
+    *{padding: 0;margin:0}
+    canvas{ background: #eee;display:block;margin:0 auto; image-rendering: pixelated;}
+  </style>
+</head>
+
+<body style="background-color: #191716">
+  <canvas id="gameCanvas" width="256" height="256"></canvas>
+  <script type="text/javascript">
+    /** @type {HTMLCanvasElement} */
+    let canvas = document.getElementById("gameCanvas");
+    /** @type {CanvasRenderingContext2D} */
+    let ctx = canvas.getContext("2d");/** @type {CanvasRenderingContext2D} */
+    document.addEventListener("keydown",keyDownHandler,false);
+    document.addEventListener("keyup",keyUpHandler,false);
+    let avatar= new Image();
+    let avatar_mirror= new Image();
+    let shadow=new Image();
+    shadow.src="sprites/avatar/shadow.png";
+    avatar.src="sprites/avatar/default.png";
+    avatar_mirror.src="sprites/avatar/default_mirror.png";
+    let right_pressed=0;
+    let left_pressed=0;
+    let up_pressed=0;
+    let down_pressed=0;
+    let last_button_pressed="up";
+    let animation_counter=0;
+    let current_animation=0;
+    let animation_speed= 2;
+    let avatar_x=128;
+    let avatar_y=128;
+    /** @type {HTMLImageElement}*/
+    let museumTiles = new Image();
+    let fps=30;
+    let museum = [
+      [36,37,4 ,4 ,4 ,4 ,39,40,39,40,4 ,4 ,4 ,4 ,38,36,],
+      [36,46,13,13,13,13,48,49,48,49,13,13,13,13,47,36,],
+      [36,55,22,22,22,22,57,58,57,58,22,22,22,22,56,36,],
+      [36,64,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,65,36,],
+      [36,64,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,65,36,],
+      [36,64,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,65,36,],
+      [36,64,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,65,36,],
+      [36,64,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,65,36,],
+      [36,64,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,65,36,],
+      [36,64,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,65,36,],
+      [36,64,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,65,36,],
+      [36,64,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,65,36,],
+      [36,64,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,65,36,],
+      [36,64,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,65,36,],
+      [36,64,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,65,36,],
+      [36,64,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,65,36,]
+    ]
+    let museum2 = [
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,30,  ,  ,  ,  ,  ,  ,30,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],    
+    ]
+    let museum3 = [
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,3 ,  ,  ,  ,  ,  ,  , 3,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,12,  ,  ,  ,  ,  ,  ,12,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,21,  ,  ,  ,  ,  ,  ,21,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],    
+    ]
+    function keyDownHandler(e){
+      if(e.keyCode == 37){
+        left_pressed=1;
+        last_button_pressed="left";
+      }
+      if(e.keyCode == 39){
+        right_pressed=1;
+        last_button_pressed="right";
+      }
+      if(e.keyCode == 38){
+        up_pressed=1;
+      }
+      if(e.keyCode == 40){
+        down_pressed=1;
+      }
+    }
+    function keyUpHandler(e){
+      if(e.keyCode == 37){
+        left_pressed=0;
+      }
+      if(e.keyCode == 39){
+        right_pressed=0;
+  
+      }
+      if(e.keyCode == 38){
+        up_pressed=0;
+      
+      }
+      if(e.keyCode == 40){
+        down_pressed=0;
+        
+      }
+    }
+    document.body.style.zoom="300%";
+    museumTiles.src = "sprites/tiles/museum.png";
+
+    function drawTile(x,y,tile_index,/** @type {HTMLImageElement}*/tileset){
+      ctx.drawImage(tileset,(tile_index%9)*16,Math.floor(tile_index/9)*16,16,16,x,y,16,16);
+    }
+
+    function playAnimationIdle(sprite){
+      if(animation_counter>=animation_speed){
+          animation_counter=0;
+          current_animation++;
+          if (current_animation>3)
+            current_animation=0;
+      }
+      ctx.drawImage(shadow,0,0,33,33,avatar_x,avatar_y,33,33);
+      ctx.drawImage(sprite,current_animation*32,0,32,32,avatar_x,avatar_y,32,32);
+    }
+    function playAnimationWalk(sprite){
+      if(animation_counter>=animation_speed){
+          animation_counter=0;
+          current_animation++;
+          if (current_animation>7)
+            current_animation=0;
+      }
+      ctx.drawImage(shadow,0,0,33,33,avatar_x,avatar_y,33,33);
+      ctx.drawImage(sprite,32*4+current_animation*32,0,32,32,avatar_x,avatar_y,32,32);
+    }
+
+    function drawAvatar(){
+      let speed=1;
+      animation_counter++;
+      let direction_horizontal=right_pressed-left_pressed;
+      let direction_vertical=down_pressed-up_pressed;
+      avatar_x+=speed*direction_horizontal;
+      avatar_y+=speed*direction_vertical;
+      if(direction_horizontal==0 && direction_vertical==0){
+        if (last_button_pressed=="right"){
+          playAnimationIdle(avatar);
+        }
+        else
+          playAnimationIdle(avatar_mirror);
+      }
+      else if (direction_horizontal!=0 || direction_vertical!=0){
+        if (last_button_pressed=="right"){
+          playAnimationWalk(avatar);
+        }
+        else
+          playAnimationWalk(avatar_mirror);
+      }
+    }
+
+    function drawMap(/** @type {Array}*/map){
+      for(var i=0;i<map.length;i++){
+        for(var j=0;j<map[i].length;j++){
+          drawTile(j*16,i*16,map[i][j],museumTiles);
+        }
+      }
+    }
+
+    function draw (){
+      setTimeout(function(){
+        requestAnimationFrame(draw);
+        ctx.fillStyle="rgb(20,20,20)";
+        ctx.fillRect(0,0,256,256);
+        drawMap(museum);
+        drawMap(museum2);
+        drawAvatar();
+        drawMap(museum3);
+      },1000/fps);
+    }
+    draw();
+  </script>
+</body>
+
+</html>

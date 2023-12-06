@@ -7,9 +7,8 @@ $binaryImageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', 
 
 // Save the binary image data to the database
 try {
-    $user_id = 1;  // Replace with the actual user ID
-    $title = "something";  // Replace with the actual title
-
+    $user_id = $_POST['username'];
+    $title = $_POST['description'];
     $stmt = $pdo->prepare("INSERT INTO paintings (user_id, title, image_data) VALUES (?, ?, ?)");
     $stmt->execute([$user_id, $title, $binaryImageData]);
 

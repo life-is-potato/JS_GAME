@@ -1,8 +1,8 @@
 <?php
-$host = "sql3.freesqldatabase.com";  // Assuming XAMPP is running locally
-$dbname = "sql3664774";
-$username = "sql3664774";
-$password = "vmrJbLSbcU";
+$host = "localhost";  // Assuming XAMPP is running locally
+$dbname = "js_game";
+$username = "root";
+$password = "";
 
 // Create a PDO instance
 try {

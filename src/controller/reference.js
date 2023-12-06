@@ -4,6 +4,8 @@ const ctx = canvas.getContext("2d");
 const effectsctx = effectsCanvas.getContext("2d");
 const buttons = document.getElementById("buttons");
 const colorinput = document.getElementById("colorpicked");
+const username = document.getElementById("username");
+const description = document.getElementById("description");
 let pixels_width = 32;
 let pixels_height = 32;
 let pixels = new Array(pixels_width * pixels_height);
@@ -229,8 +231,9 @@ function saveAsPNG() {
              console.log(xhr.responseText);
          }
      };
-    xhr.send("imageData=" + encodeURIComponent(dataURL));
-    
+    console.log(username.value);
+    console.log(description.value);
+    xhr.send("imageData=" + encodeURIComponent(dataURL)+"&username=" + encodeURIComponent(username.value)+"&description=" + encodeURIComponent(description.value));
     }
 
 buttons.addEventListener("click", pick);
