@@ -17,6 +17,7 @@
     let canvas = document.getElementById("gameCanvas");
     /** @type {CanvasRenderingContext2D} */
     let ctx = canvas.getContext("2d");/** @type {CanvasRenderingContext2D} */
+    ctx.imageSmoothingEnabled= false;
     document.addEventListener("keydown",keyDownHandler,false);
     document.addEventListener("keyup",keyUpHandler,false);
     let avatar= new Image();
@@ -32,12 +33,12 @@
     let last_button_pressed="up";
     let animation_counter=0;
     let current_animation=0;
-    let animation_speed= 2;
+    let animation_speed= 5;
     let avatar_x=128;
     let avatar_y=128;
     /** @type {HTMLImageElement}*/
     let museumTiles = new Image();
-    let fps=30;
+    let fps=60;
     let museum = [
       [36,37,4 ,4 ,4 ,4 ,39,40,39,40,4 ,4 ,4 ,4 ,38,36,],
       [36,46,13,13,13,13,48,49,48,49,13,13,13,13,47,36,],
@@ -158,8 +159,14 @@
       animation_counter++;
       let direction_horizontal=right_pressed-left_pressed;
       let direction_vertical=down_pressed-up_pressed;
-      avatar_x+=speed*direction_horizontal;
-      avatar_y+=speed*direction_vertical;
+      if(direction_horizontal!=0 && direction_vertical!=0){
+        avatar_x+=direction_horizontal*Math.sqrt(speed/2);
+        avatar_y+=direction_vertical*Math.sqrt(speed/2);
+      }
+      else{
+        avatar_x+=speed*direction_horizontal;
+        avatar_y+=speed*direction_vertical;
+      }
       if(direction_horizontal==0 && direction_vertical==0){
         if (last_button_pressed=="right"){
           playAnimationIdle(avatar);
