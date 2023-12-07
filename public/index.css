@@ -53,9 +53,23 @@
   position:relative;
 }
 
+#canvascontainer{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  top:20%;
+  margin: 0;
+  position: relative;
+}
+
 .canvas{
   background-color:lightblue; border-color: white; border-style:solid; border-radius: 3px; border-width: 3px; 
   image-rendering: pixelated;
+  position:absolute;
+}
+#effect_canvas{
+  background-color: rgba(0,0,0,0);
 }
 .canvas:hover{
   cursor:crosshair;

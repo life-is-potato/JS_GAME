@@ -36,15 +36,13 @@ function updateCanvasSize() {
     canvas.height = pixels_height * scale;
     canvas.style.width = `${pixels_width * scale}px`;
     canvas.style.height = `${pixels_height * scale}px`;
-    canvas.style.position = "absolute";
-    canvas.style.top = `${(1080 - (pixels_height * scale)) / 3}px`;
-    canvas.style.left = `${(1920 - (pixels_width * scale)) / 2}px`;
     effectsCanvas.width = pixels_width * scale;
     effectsCanvas.height = pixels_height * scale;
 
-    effectsCanvas.style.position = "absolute";
-    effectsCanvas.style.top = `${(1080 - (pixels_height * scale)) / 3}px`;
-    effectsCanvas.style.left = `${(1920 - (pixels_width * scale)) / 2}px`;
+    //effectsCanvas.style.position = "relative";
+    //effectsCanvas.style.top = `${(1080 - (pixels_height * scale)) / 3}px`;
+    //effectsCanvas.style.left = `${(1920 - (pixels_width * scale)) / 2}px`;
+    //effectsCanvas.style.margin= "0 auto";
     effectsCanvas.style.background = 'rbga(0,0,0,0)';
     effectsCanvas.style.pointerEvents = 'none';
 }
@@ -158,7 +156,7 @@ function pencil(x, y) {
 }
 
 function zoom(val) {
-    if (scale + val >= 1) scale += val;
+    if (scale + val >= 1 && scale + val<=20) scale += val;
     updateCanvasSize();
     drawPixels();
 }
@@ -221,7 +219,7 @@ function saveAsPNG() {
     const dataURL = tempCanvas.toDataURL("image/png");
     const link = document.createElement("a");
     link.href = dataURL;
-    link.download = "pixel_art.png";
+    link.download = description.value+".png";
     link.click();
     const xhr = new XMLHttpRequest();
      xhr.open("POST", "../src/model/save_image.php", true);

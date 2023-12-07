@@ -14,6 +14,7 @@
   <body>
     <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username or email">
     <input type="text" class="form-control" id="description" name="description" placeholder="Description of the painting">
+    <button onclick="saveAsPNG();">Save as Png</button>
     <div><img src="buttons/logo.png"></img></div>
     <input type="color" id="colorpicked"></input>
     <div id="mySidenav" class="sidenav">
@@ -34,9 +35,7 @@
     </div>
     <div id="canvascontainer">
       <canvas class="canvas" id="canvas"></canvas>
-      <canvas id="effect_canvas" style="image-rendering: pixelated;"></canvas>
-      
-      <button onclick="saveAsPNG()">Save as Png</button>
+      <canvas id="effect_canvas" class="canvas"></canvas>
     </div>
   </body>
   <script type="application/javascript" src="../src/controller/reference.js">

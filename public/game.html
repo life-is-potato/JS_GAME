@@ -6,7 +6,7 @@
   <title>Game</title>
   <style>
     *{padding: 0;margin:0}
-    canvas{ background: #eee;display:block;margin:0 auto; image-rendering: pixelated;}
+    canvas{ background: #eee;display:block;margin:0 auto;image-rendering: pixelated;}
   </style>
 </head>
 
@@ -44,7 +44,7 @@
       [36,46,13,13,13,13,48,49,48,49,13,13,13,13,47,36,],
       [36,55,22,22,22,22,57,58,57,58,22,22,22,22,56,36,],
       [36,64,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,65,36,],
-      [36,64,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,65,36,],
+      [36,64,0 , 0,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,65,36,],
       [36,64,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,65,36,],
       [36,64,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,65,36,],
       [36,64,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,65,36,],
@@ -63,7 +63,7 @@
       [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
       [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
       [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
-      [  ,  ,  ,  ,30,  ,  ,  ,  ,  ,  ,30,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
       [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
       [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
       [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
@@ -78,9 +78,9 @@
     let museum3 = [
       [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
       [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
-      [  ,  ,  ,  ,3 ,  ,  ,  ,  ,  ,  , 3,  ,  ,  ,  ,],
-      [  ,  ,  ,  ,12,  ,  ,  ,  ,  ,  ,12,  ,  ,  ,  ,],
-      [  ,  ,  ,  ,21,  ,  ,  ,  ,  ,  ,21,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
+      [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
       [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
       [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
       [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,],
@@ -156,17 +156,27 @@
 
     function drawAvatar(){
       let speed=1;
+      let x_speed=0;
+      let y_speed=0;
       animation_counter++;
       let direction_horizontal=right_pressed-left_pressed;
       let direction_vertical=down_pressed-up_pressed;
       if(direction_horizontal!=0 && direction_vertical!=0){
-        avatar_x+=direction_horizontal*Math.sqrt(speed/2);
-        avatar_y+=direction_vertical*Math.sqrt(speed/2);
+          x_speed+=direction_horizontal*Math.sqrt(speed/2);
+          y_speed+=direction_vertical*Math.sqrt(speed/2);
+        }
+        else{
+          x_speed+=speed*direction_horizontal;
+          y_speed+=speed*direction_vertical;
       }
-      else{
-        avatar_x+=speed*direction_horizontal;
-        avatar_y+=speed*direction_vertical;
+      if(collision(avatar_x+x_speed,avatar_y,museum) || collision(avatar_x+x_speed,avatar_y,museum2)){
+        x_speed=0;
       }
+      if(collision(avatar_x,avatar_y+y_speed,museum) || collision(avatar_x+x_speed,avatar_y+y_speed,museum2)){
+        y_speed=0;
+      }
+      avatar_x+=x_speed;
+      avatar_y+=y_speed;
       if(direction_horizontal==0 && direction_vertical==0){
         if (last_button_pressed=="right"){
           playAnimationIdle(avatar);
@@ -182,24 +192,54 @@
           playAnimationWalk(avatar_mirror);
       }
     }
-
-    function drawMap(/** @type {Array}*/map){
+    function drawFullMap(/** @type {Array}*/map){
       for(var i=0;i<map.length;i++){
         for(var j=0;j<map[i].length;j++){
+            drawTile(j*16,i*16,map[i][j],museumTiles);
+        }
+      }
+    }
+
+    function drawInitMap(/** @type {Array}*/map){
+      for(var i=0;i<map.length;i++){
+        for(var j=0;j<map[i].length;j++){
+          if((i+1)*16<(avatar_y+29))
           drawTile(j*16,i*16,map[i][j],museumTiles);
         }
       }
     }
+    function drawRestMap(/** @type {Array}*/map){
+      for(var i=0;i<map.length;i++){
+        for(var j=0;j<map[i].length;j++){
+          if((i+1)*16>(avatar_y+33))
+          drawTile(j*16,i*16,map[i][j],museumTiles);
+        }
+      }
+    }
+    function collision(x,y,/** @type {Array}*/map){
+      for(var i=0;i<map.length;i++){
+        for(var j=0;j<map[i].length;j++){
+          if(map[i][j]!=0 && typeof(map[i][j])!='undefined'){
+            if( x+6<=j*16 +16 && x+25>=j*16 && y+29<=i*16+16 && y+33>=i*16){
+              return(true);
+            }
+          }
+        }
+      }
+    }
+    
 
     function draw (){
       setTimeout(function(){
         requestAnimationFrame(draw);
         ctx.fillStyle="rgb(20,20,20)";
         ctx.fillRect(0,0,256,256);
-        drawMap(museum);
-        drawMap(museum2);
+        drawFullMap(museum);
+        //drawInitMap(museum2);
+        //drawInitMap(museum3);
         drawAvatar();
-        drawMap(museum3);
+        drawRestMap(museum2);
+        drawRestMap(museum3);
       },1000/fps);
     }
     draw();
